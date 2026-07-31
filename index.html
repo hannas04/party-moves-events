@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PartyMoves Events — Creating Unforgettable Experiences</title>
+<meta name="description" content="PartyMoves Events is a luxury event decoration studio crafting weddings, corporate events, birthdays, proposals, branding and intimate celebrations.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Marcellus&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   PARTYMOVES EVENTS — Design Tokens
+   Palette: Deep Navy / Aged Gold / Ivory — pulled from the PM monogram
+   Type: Cormorant Garamond (display) + Marcellus (eyebrow/caps) + Jost (body)
+   Signature: hand-drawn PM monogram reveal + "Moves" as the structural
+   motif for the process section + recurring diamond rule from the logo
+   ============================================================ */
+
+:root{
+  --navy-deep:#0E1830;
+  --navy:#172A4E;
+  --navy-light:#24406F;
+  --navy-glass: rgba(14,24,48,0.72);
+  --gold:#B8925A;
+  --gold-light:#D9B87C;
+  --gold-shimmer:#F1DFAE;
+  --ivory:#FAF6EC;
+  --ivory-dim:#F1EADA;
+  --ink:#231F19;
+  --ink-soft:#5C5548;
+  --white:#FFFFFF;
+
+  --display: 'Cormorant Garamond', serif;
+  --caps: 'Marcellus', serif;
+  --body: 'Jost', sans-serif;
+
+  --ease: cubic-bezier(.6,.05,.15,1);
+  --dur: .9s;
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:var(--body);
+  background:var(--ivory);
+  color:var(--ink);
+  font-weight:300;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+ul{ list-style:none; }
+::selection{ background:var(--gold-light); color:var(--navy-deep); }
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+
+:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+.eyebrow{
+  font-family:var(--caps);
+  font-size:.72rem;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  color:var(--gold);
+  display:flex;
+  align-items:center;
+  gap:.9rem;
+}
+.eyebrow::before{
+  content:'';
+  width:34px; height:1px;
+  background:var(--gold);
+  display:inline-block;
+}
+
+.diamond-rule{
+  display:flex; align-items:center; justify-content:center; gap:.7rem;
+  margin:1.6rem 0;
+}
+.diamond-rule span{ width:64px; height:1px; background:linear-gradient(90deg, transparent, var(--gold), transparent); }
+.diamond-rule i{
+  width:7px; height:7px; background:var(--gold);
+  transform:rotate(45deg); flex:none;
+}
+
+.wrap{ max-width:1240px; margin:0 auto; padding:0 6vw; }
+section{ position:relative; }
+
+h1,h2,h3,h4{ font-family:var(--display); font-weight:600; letter-spacing:.01em; }
+
+.btn{
+  font-family:var(--caps);
+  font-size:.72rem;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  padding:1.1em 2.4em;
+  display:inline-flex;
+  align-items:center;
+  gap:.7em;
+  position:relative;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  overflow:hidden;
+  transition:color .5s var(--ease);
+}
+.btn::before{
+  content:'';
+  position:absolute; inset:0;
+  background:var(--gold);
+  transform:translateX(-101%);
+  transition:transform .55s var(--ease);
+  z-index:0;
+}
+.btn span, .btn svg{ position:relative; z-index:1; transition:transform .4s var(--ease); }
+.btn svg{ width:15px; height:15px; }
+.btn:hover{ color:var(--navy-deep); }
+.btn:hover::before{ transform:translateX(0); }
+.btn:hover svg{ transform:translateX(4px); }
+
+.btn.light{ border-color:rgba(250,246,236,.55); color:var(--ivory); }
+.btn.light::before{ background:var(--ivory); }
+.btn.light:hover{ color:var(--navy-deep); }
+
+/* reveal-on-scroll */
+.reveal{ opacity:0; transform:translateY(34px); transition:opacity 1s var(--ease), transform 1s var(--ease); }
+.reveal.in{ opacity:1; transform:translateY(0); }
+.reveal-stagger > *{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal-stagger.in > *{ opacity:1; transform:translateY(0); }
+.reveal-stagger.in > *:nth-child(1){ transition-delay:.05s; }
+.reveal-stagger.in > *:nth-child(2){ transition-delay:.16s; }
+.reveal-stagger.in > *:nth-child(3){ transition-delay:.27s; }
+.reveal-stagger.in > *:nth-child(4){ transition-delay:.38s; }
+.reveal-stagger.in > *:nth-child(5){ transition-delay:.49s; }
+.reveal-stagger.in > *:nth-child(6){ transition-delay:.6s; }
+
+/* ---------------- Icon sprite (hand-drawn line icons, no emoji) --------- */
+.icon-defs{ position:absolute; width:0; height:0; overflow:hidden; }
+
+.icon{ width:26px; height:26px; stroke:currentColor; fill:none; stroke-width:1.2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ---------------- Preloader ---------------- */
+#preloader{
+  position:fixed; inset:0; z-index:999;
+  background:var(--navy-deep);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .9s var(--ease), visibility .9s var(--ease);
+}
+#preloader.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+#preloader svg{ width:150px; height:150px; }
+.pm-path{ fill:none; stroke:var(--gold-light); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round;
+  stroke-dasharray:600; stroke-dashoffset:600; animation:draw 2.1s var(--ease) forwards; }
+.pm-path.two{ animation-delay:.35s; }
+@keyframes draw{ to{ stroke-dashoffset:0; } }
+.pm-fade{ opacity:0; animation:pmfade 1s ease forwards; animation-delay:1.9s; font-family:var(--caps); color:var(--ivory-dim); letter-spacing:.4em; font-size:.62rem; text-align:center; margin-top:1.2rem; text-transform:uppercase; }
+@keyframes pmfade{ to{ opacity:1; } }
+
+/* ---------------- Nav ---------------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:1.6rem 0;
+  transition:background .5s var(--ease), padding .5s var(--ease), backdrop-filter .5s var(--ease), border-color .5s var(--ease);
+  border-bottom:1px solid transparent;
+}
+header.scrolled{
+  background:var(--navy-glass);
+  backdrop-filter:blur(14px);
+  padding:1rem 0;
+  border-color:rgba(184,146,90,.25);
+}
+.nav-inner{ display:flex; align-items:center; justify-content:space-between; }
+.brandmark{ display:flex; align-items:center; gap:.8rem; color:var(--ivory); }
+.brandmark svg{ width:38px; height:38px; }
+.brandmark small{ display:block; font-family:var(--caps); font-size:.6rem; letter-spacing:.28em; color:var(--gold-light); }
+.brandmark strong{ font-family:var(--display); font-size:1.15rem; letter-spacing:.06em; font-weight:600; }
+
+.nav-links{ display:flex; align-items:center; gap:2.6rem; }
+.nav-links a{
+  font-family:var(--caps); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ivory); position:relative; padding-bottom:5px;
+}
+.nav-links a::after{ content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--gold); transition:width .4s var(--ease); }
+.nav-links a:hover::after{ width:100%; }
+
+.nav-cta{ display:flex; align-items:center; gap:1.6rem; }
+.burger{ display:none; width:26px; height:18px; position:relative; z-index:60; }
+.burger span{ position:absolute; left:0; right:0; height:1px; background:var(--ivory); transition:transform .4s var(--ease), opacity .3s var(--ease); }
+.burger span:nth-child(1){ top:0; }
+.burger span:nth-child(2){ top:50%; transform:translateY(-50%); }
+.burger span:nth-child(3){ bottom:0; }
+.burger.open span:nth-child(1){ transform:translateY(8.5px) rotate(45deg); }
+.burger.open span:nth-child(2){ opacity:0; }
+.burger.open span:nth-child(3){ transform:translateY(-8.5px) rotate(-45deg); }
+
+.mobile-panel{
+  position:fixed; inset:0; background:var(--navy-deep); z-index:50;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2.2rem;
+  transform:translateY(-100%); transition:transform .6s var(--ease);
+}
+.mobile-panel.open{ transform:translateY(0); }
+.mobile-panel a{ font-family:var(--display); font-size:1.8rem; color:var(--ivory); }
+
+/* ---------------- Hero ---------------- */
+.hero{
+  min-height:100vh;
+  display:flex; align-items:center;
+  background:radial-gradient(ellipse at 20% 20%, var(--navy-light), var(--navy-deep) 65%);
+  color:var(--ivory);
+  position:relative; overflow:hidden;
+  padding-top:6rem;
+}
+.hero::after{
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(184,146,90,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,146,90,.05) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse at 30% 40%, black, transparent 70%);
+  pointer-events:none;
+}
+#gold-dust{ position:absolute; inset:0; pointer-events:none; }
+.dust{ position:absolute; width:3px; height:3px; border-radius:50%; background:var(--gold-light); opacity:.55;
+  animation:drift linear infinite; }
+@keyframes drift{ from{ transform:translateY(0) translateX(0); } to{ transform:translateY(-120vh) translateX(30px); } }
+
+.hero-inner{ position:relative; z-index:2; display:grid; grid-template-columns:1.05fr .95fr; gap:4vw; align-items:center; }
+.hero-copy h1{
+  font-size:clamp(2.8rem, 5.6vw, 5.1rem);
+  line-height:1.02;
+  font-weight:600;
+}
+.hero-copy h1 em{ font-style:italic; color:var(--gold-light); font-weight:500; }
+.hero-copy p{ font-family:var(--body); font-weight:300; font-size:1.08rem; color:rgba(250,246,236,.78); max-width:34em; margin:1.6rem 0 2.4rem; line-height:1.7; }
+.hero-actions{ display:flex; gap:1.1rem; flex-wrap:wrap; }
+
+.hero-monogram{ position:relative; display:flex; align-items:center; justify-content:center; }
+.hero-monogram svg{ width:min(420px, 100%); height:auto; }
+.hm-path{ fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:1400; stroke-dashoffset:1400; }
+.hm-path.p{ stroke:var(--navy-light); }
+.hm-path.m{ stroke:var(--gold); }
+.hero-monogram-ring{ position:absolute; width:110%; height:110%; border:1px solid rgba(184,146,90,.25); border-radius:50%; animation:spin 60s linear infinite; }
+.hero-monogram-ring::before{ content:''; position:absolute; width:6px; height:6px; background:var(--gold-light); border-radius:50%; top:-3px; left:50%; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+.scroll-cue{ position:absolute; bottom:2.6rem; left:6vw; display:flex; align-items:center; gap:.8rem; color:rgba(250,246,236,.6); font-family:var(--caps); font-size:.62rem; letter-spacing:.28em; text-transform:uppercase; }
+.scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--gold), transparent); position:relative; overflow:hidden; }
+.scroll-cue .line::after{ content:''; position:absolute; top:-34px; left:0; width:100%; height:34px; background:var(--gold-light); animation:scrolldown 2.2s ease-in-out infinite; }
+@keyframes scrolldown{ 0%{ top:-34px; } 100%{ top:34px; } }
+
+/* ---------------- Marquee ribbon ---------------- */
+.ribbon{ background:var(--gold); color:var(--navy-deep); overflow:hidden; padding:.85rem 0; position:relative; z-index:3; }
+.ribbon-track{ display:flex; width:max-content; animation:marquee 32s linear infinite; }
+.ribbon-track:hover{ animation-play-state:paused; }
+.ribbon-track span{ font-family:var(--caps); font-size:.78rem; letter-spacing:.22em; text-transform:uppercase; padding:0 2rem; display:flex; align-items:center; gap:1.6rem; white-space:nowrap; }
+.ribbon-track span i{ width:5px; height:5px; background:var(--navy-deep); transform:rotate(45deg); display:inline-block; }
+@keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+/* ---------------- About ---------------- */
+.about{ padding:9rem 0 8rem; background:var(--ivory); }
+.about-grid{ display:grid; grid-template-columns:.85fr 1.15fr; gap:5vw; align-items:center; }
+.about-frame{ position:relative; aspect-ratio:4/5; }
+.about-frame .panel{
+  position:absolute; inset:0; border:1px solid var(--gold);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem;
+  background:linear-gradient(155deg, var(--navy-deep), var(--navy-light) 70%);
+  color:var(--gold-light);
+}
+.about-frame .panel svg{ width:70px; height:70px; opacity:.85; }
+.about-frame .panel span{ font-family:var(--caps); font-size:.62rem; letter-spacing:.3em; text-transform:uppercase; color:rgba(241,223,174,.7); }
+.about-frame .offset{
+  position:absolute; top:1.6rem; left:1.6rem; right:-1.6rem; bottom:-1.6rem;
+  border:1px solid var(--gold); z-index:-1;
+}
+.about-copy h2{ font-size:clamp(2.1rem, 3.4vw, 3.1rem); line-height:1.12; margin-bottom:1.5rem; }
+.about-copy p{ color:var(--ink-soft); line-height:1.85; margin-bottom:1.2rem; max-width:40em; }
+.about-signature{ font-family:var(--display); font-style:italic; font-size:1.15rem; color:var(--navy); margin-top:2rem; }
+.about-signature small{ display:block; font-family:var(--caps); font-style:normal; font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft); margin-top:.5rem; }
+
+.stat-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:3rem; padding-top:2.4rem; border-top:1px solid rgba(184,146,90,.35); }
+.stat-row div b{ display:block; font-family:var(--display); font-size:2.4rem; color:var(--navy); font-weight:600; }
+.stat-row div span{ font-family:var(--caps); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-soft); }
+
+/* ---------------- Services ---------------- */
+.services{ background:var(--navy-deep); color:var(--ivory); padding:9rem 0; position:relative; }
+.services-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:2rem; margin-bottom:4rem; flex-wrap:wrap; }
+.services-head h2{ font-size:clamp(2.1rem,3.4vw,3.1rem); max-width:14em; }
+.services-head p{ color:rgba(250,246,236,.65); max-width:26em; line-height:1.8; }
+
+.svc-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:rgba(184,146,90,.28); border:1px solid rgba(184,146,90,.28); }
+.svc-card{ background:var(--navy-deep); padding:2.6rem 2.2rem; transition:background .5s var(--ease); position:relative; overflow:hidden; }
+.svc-card::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:0; background:var(--navy-light); transition:width .5s var(--ease); z-index:0; }
+.svc-card:hover::before{ width:100%; }
+.svc-card > *{ position:relative; z-index:1; }
+.svc-card .icon{ width:34px; height:34px; color:var(--gold-light); margin-bottom:1.6rem; }
+.svc-card h3{ font-size:1.5rem; margin-bottom:.7rem; font-weight:600; }
+.svc-card p{ color:rgba(250,246,236,.6); font-size:.92rem; line-height:1.7; }
+.svc-card .num{ position:absolute; top:1.6rem; right:2rem; font-family:var(--display); font-style:italic; color:rgba(217,184,124,.28); font-size:1.6rem; }
+
+/* ---------------- Process : "The Four Moves" ---------------- */
+.process{ padding:9rem 0; background:var(--ivory); }
+.process-head{ text-align:center; max-width:36em; margin:0 auto 5rem; }
+.process-head h2{ font-size:clamp(2.1rem,3.4vw,3.1rem); margin:1rem 0 1.2rem; }
+.process-head p{ color:var(--ink-soft); line-height:1.8; }
+
+.moves{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:2.4rem; }
+.moves::before{ content:''; position:absolute; top:1.9rem; left:6%; right:6%; height:1px; background:repeating-linear-gradient(90deg, var(--gold) 0 8px, transparent 8px 16px); z-index:0; }
+.move{ position:relative; z-index:1; text-align:center; }
+.move .dot{ width:3.8rem; height:3.8rem; margin:0 auto 1.6rem; border-radius:50%; background:var(--ivory); border:1px solid var(--gold); display:flex; align-items:center; justify-content:center; font-family:var(--display); font-style:italic; font-size:1.2rem; color:var(--navy); transition:transform .5s var(--ease), background .5s var(--ease), color .5s var(--ease); }
+.move:hover .dot{ background:var(--gold); color:var(--navy-deep); transform:translateY(-6px); }
+.move .tag{ font-family:var(--caps); font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; }
+.move h3{ font-size:1.4rem; margin-bottom:.6rem; }
+.move p{ font-size:.88rem; color:var(--ink-soft); line-height:1.7; }
+
+/* ---------------- Gallery ---------------- */
+.gallery{ padding:9rem 0; background:var(--navy-deep); color:var(--ivory); }
+.gallery-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:3.2rem; gap:2rem; flex-wrap:wrap; }
+.gallery-head h2{ font-size:clamp(2.1rem,3.4vw,3.1rem); }
+.filters{ display:flex; gap:.5rem; flex-wrap:wrap; }
+.filters button{
+  font-family:var(--caps); font-size:.64rem; letter-spacing:.16em; text-transform:uppercase;
+  padding:.7em 1.3em; border:1px solid rgba(184,146,90,.4); color:rgba(250,246,236,.7);
+  transition:all .4s var(--ease);
+}
+.filters button.active, .filters button:hover{ background:var(--gold); border-color:var(--gold); color:var(--navy-deep); }
+
+.g-grid{ display:grid; grid-template-columns:repeat(4, 1fr); grid-auto-rows:14vw; gap:.6rem; }
+.g-item{
+  position:relative; overflow:hidden; cursor:pointer;
+  display:flex; align-items:flex-end; padding:1.4rem;
+  transition:transform .3s ease;
+}
+.g-item:nth-child(6n+1){ grid-column:span 2; grid-row:span 2; }
+.g-item:nth-child(6n+4){ grid-row:span 2; }
+.g-item .g-bg{ position:absolute; inset:0; transition:transform .7s var(--ease); }
+.g-item:hover .g-bg{ transform:scale(1.08); }
+.g-item::after{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(14,24,48,.75), transparent 55%); }
+.g-item .g-label{ position:relative; z-index:1; }
+.g-item .g-label b{ display:block; font-family:var(--display); font-style:italic; font-size:1.2rem; }
+.g-item .g-label span{ font-family:var(--caps); font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-light); }
+.g-item .expand{ position:absolute; top:1rem; right:1rem; z-index:1; width:30px; height:30px; border:1px solid rgba(250,246,236,.5); border-radius:50%; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .3s ease; }
+.g-item:hover .expand{ opacity:1; }
+.g-item .expand svg{ width:13px; height:13px; }
+.g-item.hide{ display:none; }
+
+.g-note{ margin-top:1.6rem; font-size:.8rem; color:rgba(250,246,236,.45); font-style:italic; }
+
+.lightbox{ position:fixed; inset:0; background:rgba(14,20,38,.94); z-index:200; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:opacity .4s ease, visibility .4s ease; padding:5vw; }
+.lightbox.open{ opacity:1; visibility:visible; }
+.lb-box{ width:min(720px,100%); aspect-ratio:4/3; position:relative; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem; border:1px solid var(--gold); color:var(--gold-light); text-align:center; padding:2rem; }
+.lb-box svg{ width:64px; height:64px; }
+.lb-box b{ font-family:var(--display); font-style:italic; font-size:1.7rem; color:var(--ivory); }
+.lb-close{ position:absolute; top:-2.4rem; right:0; color:var(--ivory); display:flex; align-items:center; gap:.5rem; font-family:var(--caps); font-size:.65rem; letter-spacing:.2em; text-transform:uppercase; }
+.lb-close svg{ width:16px; height:16px; }
+
+/* ---------------- Testimonials ---------------- */
+.testimonials{ padding:9rem 0; background:var(--ivory); overflow:hidden; }
+.t-head{ text-align:center; margin-bottom:4rem; }
+.t-head h2{ font-size:clamp(2.1rem,3.4vw,3.1rem); margin-top:1rem; }
+.t-track-wrap{ max-width:760px; margin:0 auto; position:relative; }
+.t-slide{ display:none; text-align:center; animation:fadein .8s ease; }
+.t-slide.active{ display:block; }
+@keyframes fadein{ from{ opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+.t-quote{ width:34px; height:34px; color:var(--gold); margin:0 auto 1.6rem; }
+.t-slide p{ font-family:var(--display); font-size:clamp(1.35rem,2.4vw,1.85rem); font-style:italic; line-height:1.55; color:var(--navy); margin-bottom:1.8rem; }
+.t-who b{ font-family:var(--caps); font-size:.78rem; letter-spacing:.1em; color:var(--ink); }
+.t-who span{ display:block; font-size:.78rem; color:var(--ink-soft); margin-top:.2rem; }
+.t-dots{ display:flex; justify-content:center; gap:.6rem; margin-top:2.6rem; }
+.t-dots button{ width:8px; height:8px; border-radius:50%; background:rgba(184,146,90,.35); transition:background .3s ease, transform .3s ease; }
+.t-dots button.active{ background:var(--gold); transform:scale(1.3); }
+
+/* ---------------- Instagram band ---------------- */
+.ig-band{ position:relative; padding:6.5rem 0; background:linear-gradient(155deg, var(--navy-light), var(--navy-deep)); color:var(--ivory); text-align:center; }
+.ig-band h2{ font-size:clamp(1.9rem,3.2vw,2.7rem); margin:1rem 0 .8rem; }
+.ig-band p{ color:rgba(250,246,236,.7); margin-bottom:2.2rem; }
+.ig-band .icon{ width:30px; height:30px; color:var(--gold-light); margin:0 auto; }
+
+/* ---------------- Contact ---------------- */
+.contact{ padding:9rem 0; background:var(--ivory); }
+.contact-grid{ display:grid; grid-template-columns:1fr 1.1fr; gap:5vw; }
+.contact-info h2{ font-size:clamp(2.1rem,3.4vw,3.1rem); margin-bottom:1.3rem; }
+.contact-info p{ color:var(--ink-soft); line-height:1.85; margin-bottom:2.4rem; max-width:32em; }
+.info-line{ display:flex; gap:1.1rem; align-items:flex-start; padding:1.3rem 0; border-top:1px solid rgba(184,146,90,.3); }
+.info-line:last-of-type{ border-bottom:1px solid rgba(184,146,90,.3); }
+.info-line .icon{ color:var(--gold); flex:none; margin-top:.2rem; }
+.info-line b{ display:block; font-family:var(--caps); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:.3rem; }
+.info-line span{ font-size:1rem; color:var(--ink); }
+.socials{ display:flex; gap:.9rem; margin-top:2.2rem; }
+.socials a{ width:42px; height:42px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gold); transition:all .4s var(--ease); }
+.socials a:hover{ background:var(--gold); color:var(--white); transform:translateY(-4px); }
+.socials .icon{ width:17px; height:17px; }
+
+.form{ background:var(--navy-deep); color:var(--ivory); padding:3rem; position:relative; }
+.form::before{ content:''; position:absolute; top:1rem; left:1rem; right:-1rem; bottom:-1rem; border:1px solid var(--gold); z-index:-1; }
+.field{ position:relative; margin-bottom:1.7rem; }
+.field input, .field textarea, .field select{
+  width:100%; background:transparent; border:none; border-bottom:1px solid rgba(184,146,90,.4);
+  color:var(--ivory); font-family:var(--body); font-weight:300; font-size:1rem; padding:.7rem .1rem;
+}
+.field select option{ color:#111; }
+.field textarea{ resize:vertical; min-height:90px; }
+.field label{
+  position:absolute; left:.1rem; top:.7rem; color:rgba(250,246,236,.5); font-size:1rem;
+  transition:all .3s var(--ease); pointer-events:none;
+}
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label,
+.field textarea:focus + label,
+.field textarea:not(:placeholder-shown) + label,
+.field select:focus + label,
+.field.filled label{
+  top:-.9rem; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-light); font-family:var(--caps);
+}
+.field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color:var(--gold); }
+.form .btn{ width:100%; justify-content:center; margin-top:.6rem; }
+.form-note{ font-size:.76rem; color:rgba(250,246,236,.45); margin-top:1rem; text-align:center; font-style:italic; }
+
+/* ---------------- Footer ---------------- */
+footer{ background:var(--navy-deep); color:rgba(250,246,236,.7); padding-top:6rem; }
+.footer-grid{ display:grid; grid-template-columns:1.3fr 1fr 1fr 1.1fr; gap:3rem; padding-bottom:4rem; border-bottom:1px solid rgba(184,146,90,.2); }
+.footer-brand svg{ width:44px; height:44px; margin-bottom:1.2rem; }
+.footer-brand p{ font-size:.9rem; line-height:1.8; color:rgba(250,246,236,.55); max-width:24em; }
+footer h4{ font-family:var(--caps); font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-light); margin-bottom:1.3rem; }
+footer ul li{ margin-bottom:.8rem; }
+footer ul a{ font-size:.92rem; transition:color .3s ease, padding-left .3s ease; }
+footer ul a:hover{ color:var(--gold-light); padding-left:5px; }
+.footer-bottom{ display:flex; justify-content:space-between; align-items:center; padding:2rem 0; font-size:.78rem; color:rgba(250,246,236,.4); flex-wrap:wrap; gap:1rem; }
+.footer-bottom .diamond-rule{ display:none; }
+
+.back-top{ position:fixed; right:1.8rem; bottom:1.8rem; width:48px; height:48px; border-radius:50%; background:var(--navy-deep); border:1px solid var(--gold); display:flex; align-items:center; justify-content:center; color:var(--gold-light); z-index:60; opacity:0; visibility:hidden; transform:translateY(10px); transition:all .4s var(--ease); }
+.back-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
+.back-top svg{ width:16px; height:16px; }
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 980px){
+  .nav-links{ display:none; }
+  .nav-cta .btn{ display:none; }
+  .burger{ display:block; }
+  .hero-inner{ grid-template-columns:1fr; }
+  .hero-monogram{ order:-1; margin-bottom:1rem; }
+  .hero-monogram svg{ width:220px; }
+  .about-grid, .contact-grid{ grid-template-columns:1fr; }
+  .about-frame{ max-width:380px; margin:0 auto 2rem; }
+  .svc-grid{ grid-template-columns:1fr 1fr; }
+  .moves{ grid-template-columns:1fr 1fr; row-gap:3rem; }
+  .moves::before{ display:none; }
+  .g-grid{ grid-template-columns:repeat(2,1fr); grid-auto-rows:34vw; }
+  .g-item:nth-child(6n+1){ grid-column:span 2; grid-row:span 1; }
+  .footer-grid{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 560px){
+  .wrap{ padding:0 7vw; }
+  .stat-row{ grid-template-columns:1fr; gap:1.6rem; text-align:center; }
+  .svc-grid{ grid-template-columns:1fr; }
+  .moves{ grid-template-columns:1fr; }
+  .g-grid{ grid-template-columns:1fr 1fr; grid-auto-rows:38vw; }
+  .footer-grid{ grid-template-columns:1fr; }
+  .footer-bottom{ flex-direction:column; text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== ICON SPRITE ============== -->
+<svg class="icon-defs" aria-hidden="true">
+  <symbol id="i-ring" viewBox="0 0 24 24"><circle cx="9" cy="15" r="5"/><circle cx="17" cy="10" r="4"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="3" width="12" height="18"/><path d="M16 8h4v13h-4"/><path d="M8 7h1M11 7h1M8 11h1M11 11h1M8 15h1M11 15h1"/></symbol>
+  <symbol id="i-cake" viewBox="0 0 24 24"><path d="M4 21v-8h16v8H4z"/><path d="M4 17h16"/><path d="M8 13v-3M12 13v-4M16 13v-3"/><path d="M12 6c-1 0-1-1 0-2s1-2 0-3"/></symbol>
+  <symbol id="i-heart-ring" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 2.5C19 15.6 12 20 12 20z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 12L12 20 4 12V4h8l8 8z"/><circle cx="8.5" cy="8.5" r="1.2"/></symbol>
+  <symbol id="i-candle" viewBox="0 0 24 24"><path d="M12 3c1.2 1.6 1.2 2.8 0 4-1.2 1.2-1.2 2.4 0 4"/><rect x="9" y="10" width="6" height="11"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-6 2 2-6 6-2z"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/><path d="M14 7l3 3"/></symbol>
+  <symbol id="i-flower" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.3"/><ellipse cx="12" cy="5.5" rx="2.2" ry="3.3"/><ellipse cx="12" cy="18.5" rx="2.2" ry="3.3"/><ellipse cx="5.5" cy="12" rx="3.3" ry="2.2"/><ellipse cx="18.5" cy="12" rx="3.3" ry="2.2"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><path d="M3 6l9 7 9-7"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5A11 11 0 0 0 13.5 15.5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.6 7-12a7 7 0 0 0-14 0c0 5.4 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path d="M15 4h-2a4 4 0 0 0-4 4v3H7v4h2v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3V4z"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M4 20l1.4-4.1A8 8 0 1 1 8.6 19L4 20z"/><path d="M9 9c0 3 2.5 6 6 6"/></symbol>
+  <symbol id="i-quote" viewBox="0 0 24 24"><path d="M7 8c-2 0-3 1.5-3 3.5S5 15 7 15c-.3 2-1.6 3-3.5 3.3M17 8c-2 0-3 1.5-3 3.5S15 15 17 15c-.3 2-1.6 3-3.5 3.3"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></symbol>
+</svg>
+
+<!-- ============== PRELOADER ============== -->
+<div id="preloader" aria-hidden="true">
+  <div>
+    <svg viewBox="0 0 200 140">
+      <path class="pm-path one" d="M20 130 V20 M20 20 Q60 15 60 45 Q60 72 20 68" />
+      <path class="pm-path two" d="M85 130 V35 L120 95 L155 35 V130" />
+    </svg>
+    <div class="pm-fade">PartyMoves Events</div>
+  </div>
+</div>
+
+<!-- ============== HEADER ============== -->
+<header id="site-header">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brandmark">
+      <svg viewBox="0 0 200 140"><path d="M20 130 V20 M20 20 Q60 15 60 45 Q60 72 20 68" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M85 130 V35 L120 95 L155 35 V130" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><small>Est. Abuja</small><strong>PartyMoves&nbsp;Events</strong></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#contact" class="btn"><span>Enquire</span><svg class="icon"><use href="#i-arrow"/></svg></a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-panel" id="mobilePanel">
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#process">Process</a>
+  <a href="#gallery">Gallery</a>
+  <a href="#testimonials">Testimonials</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<main id="top">
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+  <div id="gold-dust"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">Weddings · Corporate · Birthdays · Proposals</p>
+      <h1>We choreograph<br>every <em>unforgettable</em><br>celebration.</h1>
+      <p>PartyMoves Events is a full-service decor and design studio based in Abuja. From an intimate proposal to a thousand-guest gala, we turn your venue into a story worth stepping into — one considered detail, one bold statement piece, one move at a time.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn light"><span>Plan Your Event</span><svg class="icon"><use href="#i-arrow"/></svg></a>
+        <a href="#gallery" class="btn"><span>View Our Work</span><svg class="icon"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+    <div class="hero-monogram">
+      <div class="hero-monogram-ring"></div>
+      <svg viewBox="0 0 260 200">
+        <path class="hm-path p" d="M40 175 V25 M40 25 Q95 18 95 60 Q95 95 40 88" />
+        <path class="hm-path m" d="M115 175 V45 L160 130 L205 45 V175" />
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<div class="ribbon">
+  <div class="ribbon-track">
+    <span><i></i>Weddings</span><span><i></i>Corporate</span><span><i></i>Birthdays</span><span><i></i>Proposals</span><span><i></i>Branding</span><span><i></i>Intimate Events</span>
+    <span><i></i>Weddings</span><span><i></i>Corporate</span><span><i></i>Birthdays</span><span><i></i>Proposals</span><span><i></i>Branding</span><span><i></i>Intimate Events</span>
+  </div>
+</div>
+
+<!-- ============== ABOUT ============== -->
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div class="about-frame reveal">
+      <div class="offset" aria-hidden="true"></div>
+      <div class="panel">
+        <svg class="icon"><use href="#i-flower"/></svg>
+        <span>The PartyMoves Studio</span>
+      </div>
+    </div>
+    <div class="about-copy">
+      <p class="eyebrow reveal">About Us</p>
+      <h2 class="reveal">Every celebration deserves an entrance worthy of the moment.</h2>
+      <p class="reveal">PartyMoves Events began with a simple conviction: decor should feel choreographed, not scattered — every arch, drape, and centrepiece moving the eye toward one seamless story. Under the direction of founder Deji Awolola, our studio has since styled weddings, courtly traditional ceremonies, corporate activations, and milestone birthdays across Abuja and beyond.</p>
+      <p class="reveal">We don't work from a catalogue. Each brief is treated as a new choreography — built around your palette, your venue, and the feeling you want your guests to carry home with them.</p>
+      <p class="about-signature reveal">"A party isn't just planned. It's moved."
+        <small>Deji Awolola — Creative Director &amp; Founder</small>
+      </p>
+      <div class="stat-row reveal-stagger">
+        <div><b>150+</b><span>Events Styled</span></div>
+        <div><b>9</b><span>Signature Services</span></div>
+        <div><b>1.6K+</b><span>Guests Delighted</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== SERVICES ============== -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="services-head reveal">
+      <div>
+        <p class="eyebrow">What We Do</p>
+        <h2>Six disciplines. One studio. Every occasion moved with intention.</h2>
+      </div>
+      <p>From the first sketch to the final flower placed, our team designs, sources, builds and styles — so you can walk in as a guest at your own event.</p>
+    </div>
+    <div class="svc-grid reveal-stagger">
+      <div class="svc-card"><span class="num">i</span><svg class="icon"><use href="#i-ring"/></svg><h3>Weddings</h3><p>Traditional, white, and destination weddings styled from aisle to reception, down to the last petal.</p></div>
+      <div class="svc-card"><span class="num">ii</span><svg class="icon"><use href="#i-building"/></svg><h3>Corporate</h3><p>Launches, galas and activations that put your brand's story into a physical, walkable space.</p></div>
+      <div class="svc-card"><span class="num">iii</span><svg class="icon"><use href="#i-cake"/></svg><h3>Birthdays</h3><p>Milestone birthdays, from first to eightieth, staged as a celebration worth photographing.</p></div>
+      <div class="svc-card"><span class="num">iv</span><svg class="icon"><use href="#i-heart-ring"/></svg><h3>Proposals</h3><p>Discreet, cinematic proposal set-ups planned around the one "yes" moment that matters.</p></div>
+      <div class="svc-card"><span class="num">v</span><svg class="icon"><use href="#i-tag"/></svg><h3>Branding</h3><p>Signage, backdrops and environmental branding that carry your identity into physical space.</p></div>
+      <div class="svc-card"><span class="num">vi</span><svg class="icon"><use href="#i-candle"/></svg><h3>Intimate Events</h3><p>Small-guest-list dinners and gatherings, styled with the same care as our largest galas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PROCESS ============== -->
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="process-head reveal">
+      <p class="eyebrow" style="justify-content:center;">How We Work</p>
+      <h2>The Four Moves</h2>
+      <p>Every PartyMoves event follows the same four movements — a rhythm refined over 150+ events, so nothing is left to chance on your day.</p>
+    </div>
+    <div class="moves reveal-stagger">
+      <div class="move">
+        <div class="dot"><svg class="icon" style="width:20px;height:20px;"><use href="#i-compass"/></svg></div>
+        <p class="tag">Move One</p>
+        <h3>Discover</h3>
+        <p>A consultation to learn your story, your venue, your guests and your budget.</p>
+      </div>
+      <div class="move">
+        <div class="dot"><svg class="icon" style="width:20px;height:20px;"><use href="#i-pencil"/></svg></div>
+        <p class="tag">Move Two</p>
+        <h3>Design</h3>
+        <p>Mood boards, palette and a full concept, refined with you until every detail feels right.</p>
+      </div>
+      <div class="move">
+        <div class="dot"><svg class="icon" style="width:20px;height:20px;"><use href="#i-flower"/></svg></div>
+        <p class="tag">Move Three</p>
+        <h3>Style</h3>
+        <p>Our team builds, dresses and styles the venue — while you focus on the day itself.</p>
+      </div>
+      <div class="move">
+        <div class="dot"><svg class="icon" style="width:20px;height:20px;"><use href="#i-sparkle"/></svg></div>
+        <p class="tag">Move Four</p>
+        <h3>Reveal</h3>
+        <p>The room opens, your guests step in, and the celebration takes over.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== GALLERY ============== -->
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="gallery-head reveal">
+      <div>
+        <p class="eyebrow">Selected Work</p>
+        <h2>A glimpse of our recent moves</h2>
+      </div>
+      <div class="filters" id="filters">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="weddings">Weddings</button>
+        <button data-filter="corporate">Corporate</button>
+        <button data-filter="birthdays">Birthdays</button>
+        <button data-filter="proposals">Proposals</button>
+        <button data-filter="branding">Branding</button>
+      </div>
+    </div>
+
+    <div class="g-grid reveal-stagger" id="gGrid">
+      <div class="g-item" data-cat="weddings" style="--c1:#B8925A; --c2:#0E1830;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Ochre &amp; Ivory Aisle</b><span>Weddings</span></div>
+      </div>
+      <div class="g-item" data-cat="corporate" style="--c1:#24406F; --c2:#0E1830;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Brand Activation</b><span>Corporate</span></div>
+      </div>
+      <div class="g-item" data-cat="birthdays" style="--c1:#D9B87C; --c2:#B8925A;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Golden 80th</b><span>Birthdays</span></div>
+      </div>
+      <div class="g-item" data-cat="proposals" style="--c1:#0E1830; --c2:#5C5548;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Rooftop Proposal</b><span>Proposals</span></div>
+      </div>
+      <div class="g-item" data-cat="weddings" style="--c1:#0E1830; --c2:#D9B87C;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Traditional Blues</b><span>Weddings</span></div>
+      </div>
+      <div class="g-item" data-cat="branding" style="--c1:#5C5548; --c2:#0E1830;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Launch Backdrop</b><span>Branding</span></div>
+      </div>
+      <div class="g-item" data-cat="corporate" style="--c1:#B8925A; --c2:#24406F;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Gala Reception</b><span>Corporate</span></div>
+      </div>
+      <div class="g-item" data-cat="birthdays" style="--c1:#0E1830; --c2:#B8925A;">
+        <div class="g-bg" style="background:linear-gradient(135deg,var(--c1),var(--c2));"></div>
+        <button class="expand" aria-label="Expand"><svg><use href="#i-expand"/></svg></button>
+        <div class="g-label"><b>Sweet Sixteen</b><span>Birthdays</span></div>
+      </div>
+    </div>
+    <p class="g-note reveal">Gallery tiles shown here are placeholder styling — swap in your event photography to complete the wall.</p>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-box" id="lbBox">
+    <button class="lb-close" id="lbClose"><span>Close</span><svg><use href="#i-close"/></svg></button>
+    <svg><use href="#i-flower"/></svg>
+    <b id="lbTitle">Ochre &amp; Ivory Aisle</b>
+    <span class="eyebrow" id="lbCat" style="justify-content:center;">Weddings</span>
+  </div>
+</div>
+
+<!-- ============== TESTIMONIALS ============== -->
+<section class="testimonials" id="testimonials">
+  <div class="wrap">
+    <div class="t-head reveal">
+      <p class="eyebrow" style="justify-content:center;">Kind Words</p>
+      <h2>What our clients say after the last guest leaves</h2>
+    </div>
+    <div class="t-track-wrap reveal">
+      <div class="t-slide active">
+        <svg class="t-quote"><use href="#i-quote"/></svg>
+        <p>They took a bare hall and turned it into the wedding I had been picturing for two years. Guests are still talking about the entrance.</p>
+        <div class="t-who"><b>Amaka O.</b><span>Bride, Traditional &amp; White Wedding</span></div>
+      </div>
+      <div class="t-slide">
+        <svg class="t-quote"><use href="#i-quote"/></svg>
+        <p>Professional from the first call to the final tear-down. Our brand launch felt exactly like the mood board we sent them.</p>
+        <div class="t-who"><b>Corporate Client</b><span>Brand Activation, Abuja</span></div>
+      </div>
+      <div class="t-slide">
+        <svg class="t-quote"><use href="#i-quote"/></svg>
+        <p>My fiancée had no idea. PartyMoves built the whole rooftop set-up in under two hours and it looked like it belonged in a magazine.</p>
+        <div class="t-who"><b>Chidi E.</b><span>Rooftop Proposal</span></div>
+      </div>
+      <div class="t-slide">
+        <svg class="t-quote"><use href="#i-quote"/></svg>
+        <p>For my mother's 80th, they treated every detail like it was the only thing that mattered. It was the party of the year.</p>
+        <div class="t-who"><b>Ngozi &amp; Family</b><span>Milestone Birthday</span></div>
+      </div>
+    </div>
+    <div class="t-dots" id="tDots"></div>
+  </div>
+</section>
+
+<!-- ============== INSTAGRAM BAND ============== -->
+<section class="ig-band">
+  <div class="wrap">
+    <svg class="icon"><use href="#i-ig"/></svg>
+    <h2>Follow the moves in real time</h2>
+    <p>@partymoves_event — behind-the-scenes builds, finished reveals and everything in between.</p>
+    <a class="btn light" href="https://bit.ly/3PdjmEu" target="_blank" rel="noopener"><span>Visit Our Instagram</span><svg class="icon"><use href="#i-arrow"/></svg></a>
+  </div>
+</section>
+
+<!-- ============== CONTACT ============== -->
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info reveal">
+      <p class="eyebrow">Get In Touch</p>
+      <h2>Let's choreograph your next event</h2>
+      <p>Tell us the date, the venue and the vision — we'll take it from there. We typically respond within one business day.</p>
+
+      <div class="info-line"><svg class="icon"><use href="#i-mail"/></svg><div><b>Email</b><span>hello@partymovesevents.com</span></div></div>
+      <div class="info-line"><svg class="icon"><use href="#i-phone"/></svg><div><b>Phone / WhatsApp</b><span>+234 800 000 0000</span></div></div>
+      <div class="info-line"><svg class="icon"><use href="#i-pin"/></svg><div><b>Studio</b><span>Abuja, FCT, Nigeria</span></div></div>
+
+      <div class="socials">
+        <a href="https://bit.ly/3PdjmEu" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon"><use href="#i-ig"/></svg></a>
+        <a href="#" aria-label="Facebook"><svg class="icon"><use href="#i-fb"/></svg></a>
+        <a href="#" aria-label="WhatsApp"><svg class="icon"><use href="#i-whatsapp"/></svg></a>
+      </div>
+    </div>
+
+    <form class="form reveal" id="enquiryForm">
+      <div class="field"><input type="text" placeholder=" " required><label>Full Name</label></div>
+      <div class="field"><input type="email" placeholder=" " required><label>Email Address</label></div>
+      <div class="field filled">
+        <select required>
+          <option value="" disabled selected hidden></option>
+          <option>Wedding</option>
+          <option>Corporate Event</option>
+          <option>Birthday</option>
+          <option>Proposal</option>
+          <option>Branding</option>
+          <option>Intimate Event</option>
+        </select>
+        <label>Event Type</label>
+      </div>
+      <div class="field"><input type="text" placeholder=" "><label>Preferred Date</label></div>
+      <div class="field"><textarea placeholder=" " required></textarea><label>Tell us about your event</label></div>
+      <button type="submit" class="btn light"><span>Send Enquiry</span><svg class="icon"><use href="#i-arrow"/></svg></button>
+      <p class="form-note" id="formNote">We'll be in touch within one business day.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <svg viewBox="0 0 200 140"><path d="M20 130 V20 M20 20 Q60 15 60 45 Q60 72 20 68" fill="none" stroke="var(--ivory)" stroke-width="8" stroke-linecap="round"/><path d="M85 130 V35 L120 95 L155 35 V130" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <p>A luxury event decoration studio in Abuja, styling weddings, corporate events, birthdays, proposals, branding and intimate celebrations.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">Our Process</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Weddings</a></li>
+          <li><a href="#services">Corporate</a></li>
+          <li><a href="#services">Birthdays</a></li>
+          <li><a href="#services">Proposals</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Studio</h4>
+        <ul>
+          <li><a href="#contact">hello@partymovesevents.com</a></li>
+          <li><a href="#contact">+234 800 000 0000</a></li>
+          <li><a href="#contact">Abuja, FCT, Nigeria</a></li>
+          <li><a href="https://bit.ly/3PdjmEu" target="_blank" rel="noopener">@partymoves_event</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> PartyMoves Events. All rights reserved.</span>
+      <span>Creating unforgettable experiences, one event at a time.</span>
+    </div>
+  </div>
+</footer>
+
+<button class="back-top" id="backTop" aria-label="Back to top"><svg><use href="#i-up"/></svg></button>
+
+<script>
+(function(){
+  "use strict";
+
+  /* Preloader */
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      document.getElementById('preloader').classList.add('hide');
+    }, 1600);
+  });
+
+  /* Gold dust particles */
+  var dustWrap = document.getElementById('gold-dust');
+  var n = window.innerWidth < 700 ? 14 : 26;
+  for(var i=0;i<n;i++){
+    var d = document.createElement('div');
+    d.className = 'dust';
+    var left = Math.random()*100;
+    var dur = 10 + Math.random()*14;
+    var delay = Math.random()*14;
+    var size = 2 + Math.random()*2.4;
+    d.style.left = left+'%';
+    d.style.top = (60+Math.random()*40)+'%';
+    d.style.width = size+'px';
+    d.style.height = size+'px';
+    d.style.animationDuration = dur+'s';
+    d.style.animationDelay = '-'+delay+'s';
+    dustWrap.appendChild(d);
+  }
+
+  /* Header scroll state */
+  var header = document.getElementById('site-header');
+  var backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    header.classList.toggle('scrolled', y > 40);
+    backTop.classList.toggle('show', y > 700);
+  });
+  backTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* Mobile menu */
+  var burger = document.getElementById('burger');
+  var panel = document.getElementById('mobilePanel');
+  burger.addEventListener('click', function(){
+    var open = panel.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  panel.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      panel.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  /* Scroll reveal */
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(function(el){ io.observe(el); });
+
+  /* Gallery filter */
+  var filterBtns = document.querySelectorAll('#filters button');
+  var gItems = document.querySelectorAll('#gGrid .g-item');
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      filterBtns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-filter');
+      gItems.forEach(function(item){
+        var match = f === 'all' || item.getAttribute('data-cat') === f;
+        item.classList.toggle('hide', !match);
+      });
+    });
+  });
+
+  /* Lightbox */
+  var lightbox = document.getElementById('lightbox');
+  var lbTitle = document.getElementById('lbTitle');
+  var lbCat = document.getElementById('lbCat');
+  gItems.forEach(function(item){
+    item.addEventListener('click', function(){
+      var title = item.querySelector('.g-label b').textContent;
+      var cat = item.querySelector('.g-label span').textContent;
+      lbTitle.textContent = title;
+      lbCat.textContent = cat;
+      lightbox.classList.add('open');
+    });
+  });
+  document.getElementById('lbClose').addEventListener('click', function(){ lightbox.classList.remove('open'); });
+  lightbox.addEventListener('click', function(e){ if(e.target === lightbox) lightbox.classList.remove('open'); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') lightbox.classList.remove('open'); });
+
+  /* Testimonials carousel */
+  var slides = document.querySelectorAll('.t-slide');
+  var dotsWrap = document.getElementById('tDots');
+  var current = 0, timer;
+  slides.forEach(function(_, idx){
+    var dot = document.createElement('button');
+    if(idx === 0) dot.classList.add('active');
+    dot.addEventListener('click', function(){ goTo(idx); resetTimer(); });
+    dotsWrap.appendChild(dot);
+  });
+  var dots = dotsWrap.querySelectorAll('button');
+  function goTo(idx){
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = idx;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  function next(){ goTo((current+1) % slides.length); }
+  function resetTimer(){ clearInterval(timer); timer = setInterval(next, 5500); }
+  resetTimer();
+
+  /* Form (front-end only demo) */
+  var form = document.getElementById('enquiryForm');
+  var note = document.getElementById('formNote');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    note.textContent = 'Thank you — your enquiry has been noted. We will reach out within one business day.';
+    note.style.color = 'var(--gold-light)';
+    form.reset();
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
